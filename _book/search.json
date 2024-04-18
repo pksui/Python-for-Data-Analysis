@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data Analysis for Python",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "聚合数据与分组操作.html",
+    "href": "聚合数据与分组操作.html",
+    "title": "3  聚合数据与分组操作",
+    "section": "",
+    "text": "3.1 什么是数据分组操作？\nHadley Wickham是R语言很多著名模块的创造者，他认为数据分组操作就是对数据进行分离或者结合。我们很容易想到的分离操作是通过DataFrame的行或列索引进行分离，比如说男生和女生的列分开。然后，我们可以分别计算男女两组数据的平均值，把两组得出来的平均值合并到一起作为结果生成一个新的对象。下图就是一个分组操作的实例展示：\n首先，我们来看一个列表形式的数据以DataFrame的形式展现出来：\ndf = pd.DataFrame({\"key1\" : [\"a\", \"a\", None, \"b\", \"b\", \"a\", None],\n                       \"key2\" : pd.Series([1, 2, 1, 2, 1, None, 1],                      \n                                          dtype=\"Int64\"),\n                       \"data1\" : np.random.standard_normal(7),\n                       \"data2\" : np.random.standard_normal(7)})\ndf\n\n\n\n\n\n\n\n\n\nkey1\nkey2\ndata1\ndata2\n\n\n\n\n0\na\n1\n-0.018759\n0.830500\n\n\n1\na\n2\n0.289015\n0.600079\n\n\n2\nNone\n1\n1.097159\n-3.083840\n\n\n3\nb\n2\n0.918609\n0.324412\n\n\n4\nb\n1\n0.657284\n0.325607\n\n\n5\na\n&lt;NA&gt;\n-0.573203\n0.245177\n\n\n6\nNone\n1\n0.115080\n-0.892270\n很显然，这个数据，前两列是关键字，后两列是数据。假设你想计算以key1为索引的data1这列数据的平均值，就可以用data1列去调用groupby功能，把key1列作为参数写进去：\ngrouped = df[\"data1\"].groupby(df['key1'])\ngrouped\n\n&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x00000144C4431040&gt;\n调用groupby得出来的结果是一个object，调用的时候，我们没有进行平均值的计算，但是这个object里面有我们接下来要进行操作的信息。接下来，我们调用Groupby里面的mean方法就可以得出结果了：\ngrouped.mean()\n\nkey1\na   -0.100982\nb    0.787947\nName: data1, dtype: float64\n我们在上面处理的数据是以key1为索引的data1：\nexample = df[['key1','data1']]\nexample\n\n\n\n\n\n\n\n\n\nkey1\ndata1\n\n\n\n\n0\na\n-0.018759\n\n\n1\na\n0.289015\n\n\n2\nNone\n1.097159\n\n\n3\nb\n0.918609\n\n\n4\nb\n0.657284\n\n\n5\na\n-0.573203\n\n\n6\nNone\n0.115080\ndata1数据分成三类：a，b和None，这里的平均值计算是分别计算了a与b种类的平均值，没有把None算上。生成的结果是一个Series，其中列名是之前DataFrame中的索引列名key1。\n我们不仅可以以DataFrame其中一列作为索引，还可以让多列作为索引，比如让key1和key2同时作为索引：\nmeans = df[\"data1\"].groupby([df['key1'], df['key2']]).mean()\nmeans\n\nkey1  key2\na     1      -0.018759\n      2       0.289015\nb     1       0.657284\n      2       0.918609\nName: data1, dtype: float64\n可以看到，这其中出现了四个数据点，也就是相对于之前的数据，这增长了两倍，它的逻辑是什么呢？如下图表所示：\n让两列作为我们groupby的索引，就是先以key1为索引分成a,b两类，以此为基础通过key2把数据再分为1,2两类，那么一共就是四类了。 当然，上面的列表是我用markdown语言自己描述的，你也可以通过Pandas的unstack方法将结果直接用DataFrame方式描述出来：\nmeans.unstack()\n\n\n\n\n\n\n\n\nkey2\n1\n2\n\n\nkey1\n\n\n\n\n\n\na\n-0.018759\n0.289015\n\n\nb\n0.657284\n0.918609\n注意，上面我们传给groupby作为索引的是DataFrame的两个列。其实也可以将适当长度数组（array）作为索引：\nstates = np.array([\"OH\", \"CA\", \"CA\", \"OH\", \"OH\", \"CA\", \"OH\"])\nyears = [2005, 2005, 2006, 2005, 2006, 2005, 2006]\ndf[\"data1\"].groupby([states, years]).mean()\n\nCA  2005   -0.142094\n    2006    1.097159\nOH  2005    0.449925\n    2006    0.386182\nName: data1, dtype: float64\ndata1这列数据被states和years分为四组，但是很显然每组的数据个数不一样，计算每组的平均值之后，把结果展示出来，转换成DataFrame形式如下所示：\ntr = df[\"data1\"].groupby([states, years]).mean()\ntr.unstack()\n\n\n\n\n\n\n\n\n\n2005\n2006\n\n\n\n\nCA\n-0.142094\n1.097159\n\n\nOH\n0.449925\n0.386182\n这里值得注意的是通过DataFrame本身的列进行索引最后的结果显示列名和行名，通过array来进行索引不会有名称，因为我们只是把数组的内容传进去，并没有把数组的名称穿进去。\n我们也可以直接通过DataFrame来去进行分组操作，不用像上面那样把想处理的数据直接拿出来：\ndf.groupby(\"key1\").mean()\n\n\n\n\n\n\n\n\n\nkey2\ndata1\ndata2\n\n\nkey1\n\n\n\n\n\n\n\na\n1.5\n-0.100982\n0.558585\n\n\nb\n1.5\n0.787947\n0.325009\n在这个情况中，我们可以发现以key1作为索引时，把其余的列都作为了分组的目标。\ndf.groupby(\"key2\").mean(numeric_only=True)\n\n\n\n\n\n\n\n\n\ndata1\ndata2\n\n\nkey2\n\n\n\n\n\n\n1\n0.462691\n-0.705001\n\n\n2\n0.603812\n0.462245\n当以key2列作为索引时，我们发现多了numeric_only=True,这是因为key1列都是字母，没有办法进行平均值取值，我们只让都是数字或者None的列进行分组操作。\ndf.groupby(['key1', 'key2']).mean()\n\n\n\n\n\n\n\n\n\n\ndata1\ndata2\n\n\nkey1\nkey2\n\n\n\n\n\n\na\n1\n-0.018759\n0.830500\n\n\n2\n0.289015\n0.600079\n\n\nb\n1\n0.657284\n0.325607\n\n\n2\n0.918609\n0.324412\n也可以直接在DataFrame上进行多重列索引。\n很多时候，我们不仅关心每组的具体特征，我们也关注每组数据的具体数量，通过GroupBy中的size方法就可以看到结果：\ndf.groupby(['key1', 'key2']).size()\n\nkey1  key2\na     1       1\n      2       1\nb     1       1\n      2       1\ndtype: int64\n这个结果看起来有歧义，我们把他变成DataFrame的形式，比较明了：\nex2 = df.groupby(['key1', 'key2']).size()\nex2.unstack()\n\n\n\n\n\n\n\n\nkey2\n1\n2\n\n\nkey1\n\n\n\n\n\n\na\n1\n1\n\n\nb\n1\n1\n额，可以看出这个数据分组的很平均，每组都只有一个数据。当我们通过GroupBy的size方法去查看数据分组后的数据数量时，一般忽视掉None的情况，也就是如果索引列有None列，我们是不计算那个None组有多少数据点的，但是也可以通过dropna=False的参数描述进行取消这个默认情况：\ndf.groupby('key1', dropna=False).size()\n\nkey1\na      3\nb      2\nNaN    2\ndtype: int64\n看一个更复杂的情况，我们知道无论是key1还是key2列都有None值，我们以这两列作为索引列去分组，看看每组的数据个数：\ndf.groupby(['key1', 'key2'], dropna=False).size()\n\nkey1  key2\na     1       1\n      2       1\n      &lt;NA&gt;    1\nb     1       1\n      2       1\nNaN   1       2\ndtype: int64\n可以看到missing的数值还不少，有三个。还有一个方法也可以查看分组后的情况，那就是count，但它只是查看非缺失值的数量：\ndf.groupby(\"key1\").count()\n\n\n\n\n\n\n\n\n\nkey2\ndata1\ndata2\n\n\nkey1\n\n\n\n\n\n\n\na\n2\n3\n3\n\n\nb\n2\n2\n2\n这可以很容易看出来，归属于a组的key2列有一个损失值。",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>聚合数据与分组操作</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "4  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "聚合数据与分组操作.html#什么是数据分组操作",
+    "href": "聚合数据与分组操作.html#什么是数据分组操作",
+    "title": "3  聚合数据与分组操作",
+    "section": "",
+    "text": "图 1: 分组实例\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nkey1/key2\n1\n2\n\n\n\n\na\na1\na2\n\n\nb\nb1\nb2",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>聚合数据与分组操作</span>"
+    ]
+  },
+  {
+    "objectID": "聚合数据与分组操作.html#遍历组中数据",
+    "href": "聚合数据与分组操作.html#遍历组中数据",
+    "title": "3  聚合数据与分组操作",
+    "section": "3.2 遍历组中数据",
+    "text": "3.2 遍历组中数据\ngroupby生成的object可以遍历，每次遍历会返回小组的名称和数据，如下所示：\n\nfor name, group in df.groupby(\"key1\"):\n  print(name)\n  print(group)\n\na\n  key1  key2     data1     data2\n0    a     1 -0.018759  0.830500\n1    a     2  0.289015  0.600079\n5    a  &lt;NA&gt; -0.573203  0.245177\nb\n  key1  key2     data1     data2\n3    b     2  0.918609  0.324412\n4    b     1  0.657284  0.325607",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>聚合数据与分组操作</span>"
+    ]
+  }
+]

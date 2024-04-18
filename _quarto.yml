@@ -1,0 +1,25 @@
+project:
+  type: book
+
+book:
+  title: "Data Analysis for Python"
+  author: "Norah Jones"
+  date: "2024/4/16"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - 数据装载、存储和文件格式.qmd
+    - 聚合数据与分组操作.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

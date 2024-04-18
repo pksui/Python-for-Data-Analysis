@@ -1,0 +1,165 @@
+# 聚合数据与分组操作
+
+在开始这章的内容之前，我们先回忆总结一下数据分析的过程。首先我们有了一些数据（这些数据可能是Excel、MySQL文件），那么第一步我们需要把这些数据加载到代码当中，并且转换成DataFrame或者Series的形式（这在第六章[数据装载、存储和文件格式](./%E6%95%B0%E6%8D%AE%E8%A3%85%E8%BD%BD%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F.qmd)讲过）下一步我们需要把这些数据稍微处理一下，比如重新把index和columns的名字修整一下、提取想要处理的数据，把不需要数据drop掉、将一些行或者列合并或者split等。那么处理完之后，我们下一步要去进行分析和总结了。
+
+这里举个例子，比如我们是物理老师，需要处理的数据是一个班级同学的中考物理成绩，那么我们只需关注他们的物理成绩，所以将数学、生物的成绩去除掉，再把其他班级的成绩去除掉。现在我们就可以处理了，我们很好奇男生和女生的物理成绩分别是怎么样的，那该如何处理呢？我们如何处理数据才能得到女生和男生物理成绩的平均分呢？这就需要要分组操作和数据聚合的操作了。
+
+Pandas主要用`groupby`模块去处理分组数据和特定数据的操作问题，它允许你对数据进行分组切块，或者对一个数据进行切片，然后总结数据的特征。跟查询语言（SQL）相比，Pandas在数据分组操作的表现更加显眼，能满足各种不同需求的处理。在这章，我们将会学到：
+
+- 通过特定功能的函数、数组或者DataFrame和Series本身的索引把一个Pandas项目分解成不同部分
+- 计算每个小组数据的个数、平均值、方差等特征
+- 可以对分组数据进行标准化、排序、回归和子集剥离等操作
+- 计算分析特定数据和有共同特征的数据
+- 分析具体范围内的数据情况（比如前排名30%数据的情况）
+
+::: {.callout-tip}
+在下一章讲的时序数据分析是`groupby`的一种特殊应用。
+:::
+
+在这本书的剩余部分，只要执行代码，我们都要遵守下面的惯例（每次执行代码前，把下面的代码放到开头执行）：
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+## 什么是数据分组操作？
+
+Hadley Wickham是R语言很多著名模块的创造者，他认为数据分组操作就是对数据进行分离或者结合。我们很容易想到的分离操作是通过DataFrame的行或列索引进行分离，比如说男生和女生的列分开。然后，我们可以分别计算男女两组数据的平均值，把两组得出来的平均值合并到一起作为结果生成一个新的对象。下图就是一个分组操作的实例展示：
+<!-- ![分组实例](.\picture\pda3_1001.png "分组实例") -->
+
+<figure>
+  <img src="./picture/pda3_1001.png" alt="分组实例" width="70%" >
+  <figcaption>图 1: 分组实例</figcaption>
+</figure>
+
+首先，我们来看一个列表形式的数据以DataFrame的形式展现出来：
+```{python}
+df = pd.DataFrame({"key1" : ["a", "a", None, "b", "b", "a", None],
+                       "key2" : pd.Series([1, 2, 1, 2, 1, None, 1],                      
+                                          dtype="Int64"),
+                       "data1" : np.random.standard_normal(7),
+                       "data2" : np.random.standard_normal(7)})
+df
+```
+很显然，这个数据，前两列是关键字，后两列是数据。假设你想计算以key1为索引的data1这列数据的平均值，就可以用`data1`列去调用`groupby`功能，把`key1`列作为参数写进去：
+
+```{python}
+grouped = df["data1"].groupby(df['key1'])
+grouped
+```
+
+调用`groupby`得出来的结果是一个object，调用的时候，我们没有进行平均值的计算，但是这个object里面有我们接下来要进行操作的信息。接下来，我们调用Groupby里面的`mean`方法就可以得出结果了：
+
+```{python}
+grouped.mean()
+```
+
+我们在上面处理的数据是以key1为索引的data1：
+
+```{python code-fold=TRUE}
+example = df[['key1','data1']]
+example
+```
+
+data1数据分成三类：a，b和None，这里的平均值计算是分别计算了a与b种类的平均值，没有把None算上。生成的结果是一个Series，其中列名是之前DataFrame中的索引列名key1。
+
+我们不仅可以以DataFrame其中一列作为索引，还可以让多列作为索引，比如让`key1`和`key2`同时作为索引：
+
+```{python}
+means = df["data1"].groupby([df['key1'], df['key2']]).mean()
+means
+```
+
+可以看到，这其中出现了四个数据点，也就是相对于之前的数据，这增长了两倍，它的逻辑是什么呢？如下图表所示：
+
+|key1/key2|1|2|
+|----|----|-----|
+|a|a1|a2|
+|b|b1|b2|
+
+让两列作为我们`groupby`的索引，就是先以`key1`为索引分成a,b两类，以此为基础通过`key2`把数据再分为1,2两类，那么一共就是四类了。 当然，上面的列表是我用markdown语言自己描述的，你也可以通过Pandas的`unstack`方法将结果直接用DataFrame方式描述出来：
+
+```{python}
+means.unstack()
+```
+
+注意，上面我们传给`groupby`作为索引的是DataFrame的两个列。其实也可以将适当长度数组（array）作为索引：
+
+```{python}
+states = np.array(["OH", "CA", "CA", "OH", "OH", "CA", "OH"])
+years = [2005, 2005, 2006, 2005, 2006, 2005, 2006]
+df["data1"].groupby([states, years]).mean()
+```
+
+data1这列数据被states和years分为四组，但是很显然每组的数据个数不一样，计算每组的平均值之后，把结果展示出来，转换成DataFrame形式如下所示：
+
+```{python}
+tr = df["data1"].groupby([states, years]).mean()
+tr.unstack()
+```
+
+这里值得注意的是通过DataFrame本身的列进行索引最后的结果显示列名和行名，通过array来进行索引不会有名称，因为我们只是把数组的内容传进去，并没有把数组的名称穿进去。
+
+我们也可以直接通过DataFrame来去进行分组操作，不用像上面那样把想处理的数据直接拿出来：
+
+```{python}
+df.groupby("key1").mean()
+```
+
+在这个情况中，我们可以发现以`key1`作为索引时，把其余的列都作为了分组的目标。
+
+```{python}
+df.groupby("key2").mean(numeric_only=True)
+```
+
+当以`key2`列作为索引时，我们发现多了`numeric_only=True`,这是因为`key1`列都是字母，没有办法进行平均值取值，我们只让都是数字或者None的列进行分组操作。
+
+```{python}
+df.groupby(['key1', 'key2']).mean()
+```
+
+也可以直接在DataFrame上进行多重列索引。
+
+很多时候，我们不仅关心每组的具体特征，我们也关注每组数据的具体数量，通过GroupBy中的`size`方法就可以看到结果：
+
+```{python}
+df.groupby(['key1', 'key2']).size()
+```
+
+这个结果看起来有歧义，我们把他变成DataFrame的形式，比较明了：
+
+```{python}
+ex2 = df.groupby(['key1', 'key2']).size()
+ex2.unstack()
+```
+
+额，可以看出这个数据分组的很平均，每组都只有一个数据。当我们通过GroupBy的`size`方法去查看数据分组后的数据数量时，一般忽视掉`None`的情况，也就是如果索引列有`None`列，我们是不计算那个`None`组有多少数据点的，但是也可以通过`dropna=False`的参数描述进行取消这个默认情况：
+
+```{python}
+df.groupby('key1', dropna=False).size()
+```
+
+看一个更复杂的情况，我们知道无论是`key1`还是`key2`列都有`None`值，我们以这两列作为索引列去分组，看看每组的数据个数：
+
+```{python}
+df.groupby(['key1', 'key2'], dropna=False).size()
+```
+
+可以看到missing的数值还不少，有三个。还有一个方法也可以查看分组后的情况，那就是`count`，但它只是查看非缺失值的数量：
+
+```{python}
+df.groupby("key1").count()
+```
+
+这可以很容易看出来，归属于a组的`key2`列有一个损失值。
+
+## 遍历组中数据
+
+`groupby`生成的object可以遍历，每次遍历会返回小组的名称和数据，如下所示：
+
+```{python}
+for name, group in df.groupby("key1"):
+  print(name)
+  print(group)
+```
+
