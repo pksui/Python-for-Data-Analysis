@@ -153,7 +153,7 @@ df.groupby("key1").count()
 
 这可以很容易看出来，归属于a组的`key2`列有一个损失值。
 
-## 遍历组中数据
+### 遍历组中数据
 
 `groupby`生成的object可以遍历，每次遍历会返回小组的名称和数据，如下所示：
 
@@ -162,4 +162,36 @@ for name, group in df.groupby("key1"):
   print(name)
   print(group)
 ```
+
+当数据中被分组操作时，如果有不止一个索引列，那么，groupby之后，会返回一个tuple（里面有多个参数，整体代表数据特定的分类），和对应特定分类的数据：
+
+```{python}
+for (k1, k2), group in df.groupby(["key1", "key2"]):
+  print((k1, k2))
+  print(group)
+```
+
+当对分组生成的objct遍历完成之后，我们希望有一个数据结构可以把每次遍历的数据都放入进去，那么这个数据结构最好是字典，如下所示，一旦有一个字典后，我们就可以按我们的想法随时调取想要查看的数据：
+
+```{python}
+pieces = {name: group for name, group in df.groupby("key1")}
+pieces["b"]
+```
+
+我们还可以根据列名提取几列来进行分组，下面这个例子是通过把key1，key2设置成key， data1，data2设置成data，这就成了两组，再把两组数据展现出来，但是这个方式我觉得不如直接通过前几章讲得方式（直接在DataFrame数据结构上进行columns的合并或者分开）
+
+```{python}
+grouped = df.groupby({"key1": "key", "key2": "key",
+                     "data1": "data", "data2": "data"}, axis="columns")
+```
+
+```{python}
+for group_key, group_values in grouped:
+  print(group_key)
+  print(group_values)
+```
+
+###  选择一列或者特定的很多列
+
+
 

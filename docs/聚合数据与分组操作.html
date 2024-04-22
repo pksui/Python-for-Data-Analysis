@@ -104,10 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
-
-
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-
 
 
 </head>
@@ -192,8 +189,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#什么是数据分组操作" id="toc-什么是数据分组操作" class="nav-link active" data-scroll-target="#什么是数据分组操作"><span class="header-section-number">3.1</span> 什么是数据分组操作？</a></li>
-  <li><a href="#遍历组中数据" id="toc-遍历组中数据" class="nav-link" data-scroll-target="#遍历组中数据"><span class="header-section-number">3.2</span> 遍历组中数据</a></li>
+  <li><a href="#什么是数据分组操作" id="toc-什么是数据分组操作" class="nav-link active" data-scroll-target="#什么是数据分组操作"><span class="header-section-number">3.1</span> 什么是数据分组操作？</a>
+  <ul class="collapse">
+  <li><a href="#遍历组中数据" id="toc-遍历组中数据" class="nav-link" data-scroll-target="#遍历组中数据"><span class="header-section-number">3.1.1</span> 遍历组中数据</a></li>
+  <li><a href="#选择一列或者特定的很多列" id="toc-选择一列或者特定的很多列" class="nav-link" data-scroll-target="#选择一列或者特定的很多列"><span class="header-section-number">3.1.2</span> 选择一列或者特定的很多列</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -243,7 +243,7 @@ Tip
 </div>
 </div>
 <p>在这本书的剩余部分，只要执行代码，我们都要遵守下面的惯例（每次执行代码前，把下面的代码放到开头执行）：</p>
-<div id="d75a5541" class="cell" data-execution_count="1">
+<div id="55c25e46" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -257,7 +257,7 @@ Tip
 </figcaption>
 </figure>
 <p>首先，我们来看一个列表形式的数据以DataFrame的形式展现出来：</p>
-<div id="0428e158" class="cell" data-execution_count="2">
+<div id="a077b653" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"key1"</span> : [<span class="st">"a"</span>, <span class="st">"a"</span>, <span class="va">None</span>, <span class="st">"b"</span>, <span class="st">"b"</span>, <span class="st">"a"</span>, <span class="va">None</span>],</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"key2"</span> : pd.Series([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="va">None</span>, <span class="dv">1</span>],                      </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                          dtype<span class="op">=</span><span class="st">"Int64"</span>),</span>
@@ -284,50 +284,50 @@ Tip
 <td data-quarto-table-cell-role="th">0</td>
 <td>a</td>
 <td>1</td>
-<td>-0.018759</td>
-<td>0.830500</td>
+<td>-0.910706</td>
+<td>-0.393066</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>a</td>
 <td>2</td>
-<td>0.289015</td>
-<td>0.600079</td>
+<td>-0.191812</td>
+<td>1.085801</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>None</td>
 <td>1</td>
-<td>1.097159</td>
-<td>-3.083840</td>
+<td>0.143230</td>
+<td>0.059381</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>b</td>
 <td>2</td>
-<td>0.918609</td>
-<td>0.324412</td>
+<td>0.148473</td>
+<td>-0.849767</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>b</td>
 <td>1</td>
-<td>0.657284</td>
-<td>0.325607</td>
+<td>-0.024038</td>
+<td>0.601124</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>a</td>
 <td>&lt;NA&gt;</td>
-<td>-0.573203</td>
-<td>0.245177</td>
+<td>0.654121</td>
+<td>0.680542</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>None</td>
 <td>1</td>
-<td>0.115080</td>
-<td>-0.892270</td>
+<td>1.148840</td>
+<td>0.470646</td>
 </tr>
 </tbody>
 </table>
@@ -337,25 +337,25 @@ Tip
 </div>
 </div>
 <p>很显然，这个数据，前两列是关键字，后两列是数据。假设你想计算以key1为索引的data1这列数据的平均值，就可以用<code>data1</code>列去调用<code>groupby</code>功能，把<code>key1</code>列作为参数写进去：</p>
-<div id="3c9f0ea6" class="cell" data-execution_count="3">
+<div id="3d032505" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>grouped <span class="op">=</span> df[<span class="st">"data1"</span>].groupby(df[<span class="st">'key1'</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>grouped</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
-<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x00000144C4431040&gt;</code></pre>
+<pre><code>&lt;pandas.core.groupby.generic.SeriesGroupBy object at 0x79c2fecd51b0&gt;</code></pre>
 </div>
 </div>
 <p>调用<code>groupby</code>得出来的结果是一个object，调用的时候，我们没有进行平均值的计算，但是这个object里面有我们接下来要进行操作的信息。接下来，我们调用Groupby里面的<code>mean</code>方法就可以得出结果了：</p>
-<div id="37e78e1c" class="cell" data-execution_count="4">
+<div id="f78ede3f" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>grouped.mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>key1
-a   -0.100982
-b    0.787947
+a   -0.149466
+b    0.062217
 Name: data1, dtype: float64</code></pre>
 </div>
 </div>
 <p>我们在上面处理的数据是以key1为索引的data1：</p>
-<div id="cdeb57e8" class="cell" data-execution_count="5">
+<div id="a469bb2c" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>example <span class="op">=</span> df[[<span class="st">'key1'</span>,<span class="st">'data1'</span>]]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>example</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -375,37 +375,37 @@ Name: data1, dtype: float64</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>a</td>
-<td>-0.018759</td>
+<td>-0.910706</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>a</td>
-<td>0.289015</td>
+<td>-0.191812</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>None</td>
-<td>1.097159</td>
+<td>0.143230</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>b</td>
-<td>0.918609</td>
+<td>0.148473</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>b</td>
-<td>0.657284</td>
+<td>-0.024038</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>a</td>
-<td>-0.573203</td>
+<td>0.654121</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>None</td>
-<td>0.115080</td>
+<td>1.148840</td>
 </tr>
 </tbody>
 </table>
@@ -416,15 +416,15 @@ Name: data1, dtype: float64</code></pre>
 </div>
 <p>data1数据分成三类：a，b和None，这里的平均值计算是分别计算了a与b种类的平均值，没有把None算上。生成的结果是一个Series，其中列名是之前DataFrame中的索引列名key1。</p>
 <p>我们不仅可以以DataFrame其中一列作为索引，还可以让多列作为索引，比如让<code>key1</code>和<code>key2</code>同时作为索引：</p>
-<div id="b72ed78c" class="cell" data-execution_count="6">
+<div id="067cdb3b" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> df[<span class="st">"data1"</span>].groupby([df[<span class="st">'key1'</span>], df[<span class="st">'key2'</span>]]).mean()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>key1  key2
-a     1      -0.018759
-      2       0.289015
-b     1       0.657284
-      2       0.918609
+a     1      -0.910706
+      2      -0.191812
+b     1      -0.024038
+      2       0.148473
 Name: data1, dtype: float64</code></pre>
 </div>
 </div>
@@ -451,7 +451,7 @@ Name: data1, dtype: float64</code></pre>
 </tbody>
 </table>
 <p>让两列作为我们<code>groupby</code>的索引，就是先以<code>key1</code>为索引分成a,b两类，以此为基础通过<code>key2</code>把数据再分为1,2两类，那么一共就是四类了。 当然，上面的列表是我用markdown语言自己描述的，你也可以通过Pandas的<code>unstack</code>方法将结果直接用DataFrame方式描述出来：</p>
-<div id="cd171b7b" class="cell" data-execution_count="7">
+<div id="d7e64baf" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>means.unstack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <div>
@@ -474,13 +474,13 @@ Name: data1, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">a</td>
-<td>-0.018759</td>
-<td>0.289015</td>
+<td>-0.910706</td>
+<td>-0.191812</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">b</td>
-<td>0.657284</td>
-<td>0.918609</td>
+<td>-0.024038</td>
+<td>0.148473</td>
 </tr>
 </tbody>
 </table>
@@ -490,20 +490,20 @@ Name: data1, dtype: float64</code></pre>
 </div>
 </div>
 <p>注意，上面我们传给<code>groupby</code>作为索引的是DataFrame的两个列。其实也可以将适当长度数组（array）作为索引：</p>
-<div id="a77e8e10" class="cell" data-execution_count="8">
+<div id="0e9ecd70" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> np.array([<span class="st">"OH"</span>, <span class="st">"CA"</span>, <span class="st">"CA"</span>, <span class="st">"OH"</span>, <span class="st">"OH"</span>, <span class="st">"CA"</span>, <span class="st">"OH"</span>])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> [<span class="dv">2005</span>, <span class="dv">2005</span>, <span class="dv">2006</span>, <span class="dv">2005</span>, <span class="dv">2006</span>, <span class="dv">2005</span>, <span class="dv">2006</span>]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"data1"</span>].groupby([states, years]).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>CA  2005   -0.142094
-    2006    1.097159
-OH  2005    0.449925
-    2006    0.386182
+<pre><code>CA  2005    0.231155
+    2006    0.143230
+OH  2005   -0.381117
+    2006    0.562401
 Name: data1, dtype: float64</code></pre>
 </div>
 </div>
 <p>data1这列数据被states和years分为四组，但是很显然每组的数据个数不一样，计算每组的平均值之后，把结果展示出来，转换成DataFrame形式如下所示：</p>
-<div id="63cbb1a3" class="cell" data-execution_count="9">
+<div id="61dd9764" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tr <span class="op">=</span> df[<span class="st">"data1"</span>].groupby([states, years]).mean()</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>tr.unstack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -522,13 +522,13 @@ Name: data1, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">CA</td>
-<td>-0.142094</td>
-<td>1.097159</td>
+<td>0.231155</td>
+<td>0.143230</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">OH</td>
-<td>0.449925</td>
-<td>0.386182</td>
+<td>-0.381117</td>
+<td>0.562401</td>
 </tr>
 </tbody>
 </table>
@@ -539,7 +539,7 @@ Name: data1, dtype: float64</code></pre>
 </div>
 <p>这里值得注意的是通过DataFrame本身的列进行索引最后的结果显示列名和行名，通过array来进行索引不会有名称，因为我们只是把数组的内容传进去，并没有把数组的名称穿进去。</p>
 <p>我们也可以直接通过DataFrame来去进行分组操作，不用像上面那样把想处理的数据直接拿出来：</p>
-<div id="2a1b8919" class="cell" data-execution_count="10">
+<div id="a5472e4c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">"key1"</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <div>
@@ -565,14 +565,14 @@ Name: data1, dtype: float64</code></pre>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">a</td>
 <td>1.5</td>
-<td>-0.100982</td>
-<td>0.558585</td>
+<td>-0.149466</td>
+<td>0.457759</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">b</td>
 <td>1.5</td>
-<td>0.787947</td>
-<td>0.325009</td>
+<td>0.062217</td>
+<td>-0.124321</td>
 </tr>
 </tbody>
 </table>
@@ -582,7 +582,7 @@ Name: data1, dtype: float64</code></pre>
 </div>
 </div>
 <p>在这个情况中，我们可以发现以<code>key1</code>作为索引时，把其余的列都作为了分组的目标。</p>
-<div id="a29430ba" class="cell" data-execution_count="11">
+<div id="5d8f0594" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">"key2"</span>).mean(numeric_only<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <div>
@@ -605,13 +605,13 @@ Name: data1, dtype: float64</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">1</td>
-<td>0.462691</td>
-<td>-0.705001</td>
+<td>0.089331</td>
+<td>0.184521</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.603812</td>
-<td>0.462245</td>
+<td>-0.021670</td>
+<td>0.118017</td>
 </tr>
 </tbody>
 </table>
@@ -621,7 +621,7 @@ Name: data1, dtype: float64</code></pre>
 </div>
 </div>
 <p>当以<code>key2</code>列作为索引时，我们发现多了<code>numeric_only=True</code>,这是因为<code>key1</code>列都是字母，没有办法进行平均值取值，我们只让都是数字或者None的列进行分组操作。</p>
-<div id="9aa90fc4" class="cell" data-execution_count="12">
+<div id="8026ad1d" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.groupby([<span class="st">'key1'</span>, <span class="st">'key2'</span>]).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <div>
@@ -647,24 +647,24 @@ Name: data1, dtype: float64</code></pre>
 <tr class="odd">
 <td rowspan="2" data-quarto-table-cell-role="th" data-valign="top">a</td>
 <td data-quarto-table-cell-role="th">1</td>
-<td>-0.018759</td>
-<td>0.830500</td>
+<td>-0.910706</td>
+<td>-0.393066</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.289015</td>
-<td>0.600079</td>
+<td>-0.191812</td>
+<td>1.085801</td>
 </tr>
 <tr class="odd">
 <td rowspan="2" data-quarto-table-cell-role="th" data-valign="top">b</td>
 <td data-quarto-table-cell-role="th">1</td>
-<td>0.657284</td>
-<td>0.325607</td>
+<td>-0.024038</td>
+<td>0.601124</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">2</td>
-<td>0.918609</td>
-<td>0.324412</td>
+<td>0.148473</td>
+<td>-0.849767</td>
 </tr>
 </tbody>
 </table>
@@ -675,7 +675,7 @@ Name: data1, dtype: float64</code></pre>
 </div>
 <p>也可以直接在DataFrame上进行多重列索引。</p>
 <p>很多时候，我们不仅关心每组的具体特征，我们也关注每组数据的具体数量，通过GroupBy中的<code>size</code>方法就可以看到结果：</p>
-<div id="17aa8aa2" class="cell" data-execution_count="13">
+<div id="1ca02951" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df.groupby([<span class="st">'key1'</span>, <span class="st">'key2'</span>]).size()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>key1  key2
@@ -687,7 +687,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>这个结果看起来有歧义，我们把他变成DataFrame的形式，比较明了：</p>
-<div id="12629ca2" class="cell" data-execution_count="14">
+<div id="36259ef1" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ex2 <span class="op">=</span> df.groupby([<span class="st">'key1'</span>, <span class="st">'key2'</span>]).size()</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ex2.unstack()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -727,7 +727,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>额，可以看出这个数据分组的很平均，每组都只有一个数据。当我们通过GroupBy的<code>size</code>方法去查看数据分组后的数据数量时，一般忽视掉<code>None</code>的情况，也就是如果索引列有<code>None</code>列，我们是不计算那个<code>None</code>组有多少数据点的，但是也可以通过<code>dropna=False</code>的参数描述进行取消这个默认情况：</p>
-<div id="9cbd8bda" class="cell" data-execution_count="15">
+<div id="cbc93975" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">'key1'</span>, dropna<span class="op">=</span><span class="va">False</span>).size()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>key1
@@ -738,7 +738,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>看一个更复杂的情况，我们知道无论是<code>key1</code>还是<code>key2</code>列都有<code>None</code>值，我们以这两列作为索引列去分组，看看每组的数据个数：</p>
-<div id="4377d605" class="cell" data-execution_count="16">
+<div id="21635ac2" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.groupby([<span class="st">'key1'</span>, <span class="st">'key2'</span>], dropna<span class="op">=</span><span class="va">False</span>).size()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>key1  key2
@@ -752,7 +752,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>可以看到missing的数值还不少，有三个。还有一个方法也可以查看分组后的情况，那就是<code>count</code>，但它只是查看非缺失值的数量：</p>
-<div id="9661dea4" class="cell" data-execution_count="17">
+<div id="194cd50b" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">"key1"</span>).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="17">
 <div>
@@ -795,28 +795,128 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>这可以很容易看出来，归属于a组的<code>key2</code>列有一个损失值。</p>
-</section>
-<section id="遍历组中数据" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="遍历组中数据"><span class="header-section-number">3.2</span> 遍历组中数据</h2>
+<section id="遍历组中数据" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="遍历组中数据"><span class="header-section-number">3.1.1</span> 遍历组中数据</h3>
 <p><code>groupby</code>生成的object可以遍历，每次遍历会返回小组的名称和数据，如下所示：</p>
-<div id="9f033cf8" class="cell" data-execution_count="18">
+<div id="6f25f289" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, group <span class="kw">in</span> df.groupby(<span class="st">"key1"</span>):</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(name)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>a
   key1  key2     data1     data2
-0    a     1 -0.018759  0.830500
-1    a     2  0.289015  0.600079
-5    a  &lt;NA&gt; -0.573203  0.245177
+0    a     1 -0.910706 -0.393066
+1    a     2 -0.191812  1.085801
+5    a  &lt;NA&gt;  0.654121  0.680542
 b
   key1  key2     data1     data2
-3    b     2  0.918609  0.324412
-4    b     1  0.657284  0.325607</code></pre>
+3    b     2  0.148473 -0.849767
+4    b     1 -0.024038  0.601124</code></pre>
 </div>
 </div>
+<p>当数据中被分组操作时，如果有不止一个索引列，那么，groupby之后，会返回一个tuple（里面有多个参数，整体代表数据特定的分类），和对应特定分类的数据：</p>
+<div id="7f6f5b9c" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k1, k2), group <span class="kw">in</span> df.groupby([<span class="st">"key1"</span>, <span class="st">"key2"</span>]):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>((k1, k2))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('a', 1)
+  key1  key2     data1     data2
+0    a     1 -0.910706 -0.393066
+('a', 2)
+  key1  key2     data1     data2
+1    a     2 -0.191812  1.085801
+('b', 1)
+  key1  key2     data1     data2
+4    b     1 -0.024038  0.601124
+('b', 2)
+  key1  key2     data1     data2
+3    b     2  0.148473 -0.849767</code></pre>
+</div>
+</div>
+<p>当对分组生成的objct遍历完成之后，我们希望有一个数据结构可以把每次遍历的数据都放入进去，那么这个数据结构最好是字典，如下所示，一旦有一个字典后，我们就可以按我们的想法随时调取想要查看的数据：</p>
+<div id="88ee8e1a" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pieces <span class="op">=</span> {name: group <span class="cf">for</span> name, group <span class="kw">in</span> df.groupby(<span class="st">"key1"</span>)}</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>pieces[<span class="st">"b"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div>
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">key1</th>
+<th data-quarto-table-cell-role="th">key2</th>
+<th data-quarto-table-cell-role="th">data1</th>
+<th data-quarto-table-cell-role="th">data2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>b</td>
+<td>2</td>
+<td>0.148473</td>
+<td>-0.849767</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>b</td>
+<td>1</td>
+<td>-0.024038</td>
+<td>0.601124</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>我们还可以根据列名提取几列来进行分组，下面这个例子是通过把key1，key2设置成key， data1，data2设置成data，这就成了两组，再把两组数据展现出来，但是这个方式我觉得不如直接通过前几章讲得方式（直接在DataFrame数据结构上进行columns的合并或者分开）</p>
+<div id="10c2ce2f" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>grouped <span class="op">=</span> df.groupby({<span class="st">"key1"</span>: <span class="st">"key"</span>, <span class="st">"key2"</span>: <span class="st">"key"</span>,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"data1"</span>: <span class="st">"data"</span>, <span class="st">"data2"</span>: <span class="st">"data"</span>}, axis<span class="op">=</span><span class="st">"columns"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/tmp/ipykernel_21467/2563747980.py:1: FutureWarning:
+
+DataFrame.groupby with axis=1 is deprecated. Do `frame.T.groupby(...)` without axis instead.
+</code></pre>
+</div>
+</div>
+<div id="80c2c613" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> group_key, group_values <span class="kw">in</span> grouped:</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(group_key)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="bu">print</span>(group_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data
+      data1     data2
+0 -0.910706 -0.393066
+1 -0.191812  1.085801
+2  0.143230  0.059381
+3  0.148473 -0.849767
+4 -0.024038  0.601124
+5  0.654121  0.680542
+6  1.148840  0.470646
+key
+   key1  key2
+0     a     1
+1     a     2
+2  None     1
+3     b     2
+4     b     1
+5     a  &lt;NA&gt;
+6  None     1</code></pre>
+</div>
+</div>
+</section>
+<section id="选择一列或者特定的很多列" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="选择一列或者特定的很多列"><span class="header-section-number">3.1.2</span> 选择一列或者特定的很多列</h3>
+
+
+</section>
 </section>
 
 </main> <!-- /main -->
