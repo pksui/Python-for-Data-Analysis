@@ -183,9 +183,6 @@ pieces["b"]
 ```{python}
 grouped = df.groupby({"key1": "key", "key2": "key",
                      "data1": "data", "data2": "data"}, axis="columns")
-```
-
-```{python}
 for group_key, group_values in grouped:
   print(group_key)
   print(group_values)
@@ -193,5 +190,33 @@ for group_key, group_values in grouped:
 
 ###  选择一列或者特定的很多列
 
+像用DataFrame形式储存的数据，可能有很多列，有很多索引列，但是我们只想选择我们care的数据，这时可以用groupy方法后，在后面加上一个方括号输入你关心的数据列。
 
+```{python, results='hide'}
+df.groupby("key1")["data1"]
+df.groupby("key2")[["data2"]]
+#还可以用下面这种方式来展现
+df["data1"].groupby(df["key1"])
+df[["data2"]].groupby(df["key1"]) 
+```
 
+:::{.callout-tip}
+如果你想用groupby去调用两列及以上的数据列，要用[['a','b','c']]这种方式把要索引的数据放在groupby的括号后面，因为无论是一个数据还是多个数据括号里的内容必须只能为一个，所以要么是一个字符串，要么就是一个列表（list）。
+:::
+
+分组操作之后，我们可以继续进行数值计算的操作，比如说进行平均值计算:
+```{python}
+df.groupby(["key1", "key2"])[["data2"]].mean()
+```
+
+这里有一个有意思的现象，如果你传给groupby的是一个字符串，它最后得出的结果是一个Series,因为pandas认为这只是一个数据列，只不过给它两个索引。但是如果你传给它一个list，哪怕list里面只有一个字符串，pandas会认为这有很多个数据列，应该生成一个DataFrame。
+```{python}
+s_grouped = df.groupby(["key1", "key2"])["data2"]
+s_grouped
+```
+
+```{python}
+s_grouped.mean()
+```
+
+### 通过字典和序列进行分组操作
